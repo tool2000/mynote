@@ -1,0 +1,6 @@
+site_name: AI Research Notes
+site_url: https://tool2000.github.io/notes/
+theme:
+  name: material
+nav:
+  - Home: index.md
