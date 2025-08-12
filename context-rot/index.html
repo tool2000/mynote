@@ -1,0 +1,437 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+      
+      
+        <link rel="canonical" href="https://tool2000.github.io/notes/context-rot/">
+      
+      
+      
+      
+      <link rel="icon" href="../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.6.16">
+    
+    
+      
+        <title>컨텍스트 부패, 입력토큰의 증가가 LLM 성능에 미치는 영향 - AI Research Notes</title>
+      
+    
+    
+      <link rel="stylesheet" href="../assets/stylesheets/main.7e37652d.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+    <script>__md_scope=new URL("..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+    
+  </head>
+  
+  
+    <body dir="ltr">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#llm" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href=".." title="AI Research Notes" class="md-header__button md-logo" aria-label="AI Research Notes" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            AI Research Notes
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              컨텍스트 부패, 입력토큰의 증가가 LLM 성능에 미치는 영향
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href=".." title="AI Research Notes" class="md-nav__button md-logo" aria-label="AI Research Notes" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    AI Research Notes
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href=".." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Home
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      문제 제기
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#long-context-llm-benchmark" class="md-nav__link">
+    <span class="md-ellipsis">
+      long context 에서 llm 모델의 성능저하를 보여주는 benchmark
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#-needle-question-similarity" class="md-nav__link">
+    <span class="md-ellipsis">
+      바늘-질문 유사성(Needle-Question Similarity)
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#impact-of-distractors" class="md-nav__link">
+    <span class="md-ellipsis">
+      방해 요소의 영향(Impact of Distractors)
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#-needle-haystack-similarity" class="md-nav__link">
+    <span class="md-ellipsis">
+      바늘-건초더미 유사성(Needle-Haystack Similarity)
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#haystack-structure" class="md-nav__link">
+    <span class="md-ellipsis">
+      건초더미 구조(Haystack Structure)
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#-" class="md-nav__link">
+    <span class="md-ellipsis">
+      - 벤치마크의 자료구조는 역으로, 훈련 데이터를 어떻게 설계하고 수집할 것인가에 대한 기초 아이디어를 제공하기도 한다.
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+
+<h1 id="llm">컨텍스트 부패, 입력토큰의 증가가 LLM 성능에 미치는 영향</h1>
+<h2 id="_1">문제 제기</h2>
+<pre><code>- long context 성능 평가는 주로 건초더미 속 바늘(NIAH) 테스트로 측정된다
+- 그러나는 이는 간단한 어휘 검색 과제일뿐 요약이나 모호한 정보 처리에 대한 추론 능력까지 완벽한지는 의문이다
+- 링크 : https://research.trychroma.com/context-rot
+</code></pre>
+<h2 id="long-context-llm-benchmark">long context 에서 llm 모델의 성능저하를 보여주는 benchmark</h2>
+<pre><code>- 어휘가 아닌 일치 항목이 있는 바늘-질문 쌍을 포함하는 NoLiMa 
+- 주어진 텍스트 조각의 부재를 인식하는 모델을 테스트, AbsenceBench
+- Michelangelo 벤치마크 : Latent Structure Queries(LSQ) 프레임워크 논문
+    - 멀티턴에서 특정 질문의 i 번째 인스턴스를 검색하는 테스트(MRCR)
+    - 가상의 Python 리스트에 **삽입·삭제·정렬**을 지시하는 프롬프트 성공률(Latent List)
+    - 허구 이야기+무작위 문자열에서 답 찾기. I don't know 라고 말해야함 (IDK)
+- Graphwalks 벤치마크 : 컨텍스트 전체를 **방향 그래프(edge list)** 로 채운 뒤, BFS 또는 부모노드를 찾는 능력을 테스트
+</code></pre>
+<h2 id="-needle-question-similarity"><strong>바늘-질문 유사성(Needle-Question Similarity)</strong></h2>
+<pre><code>- 낮은 유사도의 바늘-질문 쌍을 사용하는 긴 문맥에서 성능이 더 빨리 저하(빨간선)
+    ![[Pasted image 20250721192614.png]]
+- 작은 모델(low performance)이고 바늘-질문 유사성이 낮으면 10k 부근에서 정확도 70% 수준
+- 모델 크기에 상관없이 바늘-질문 유사성(약 0.8 전후)이 높으면 10k 부근에서도 90% 이상 방어
+</code></pre>
+<h2 id="impact-of-distractors"><strong>방해 요소의 영향(Impact of Distractors)</strong></h2>
+<pre><code>- 방해 문장 수가 늘어날수록 성능 곡선 기울기가 가팔라짐
+- 잡음·중복·비슷한 문장까지 함께 주입하면 답이 틀릴 확률 급증
+- ![[Pasted image 20250721202015.png]]
+- 파란선: 방해요소 없음, 노란선: 방해요소 1개, 빨간선: 방해요소 4개
+- context크기 500k 이하인 상위모델(high performance)의 경우, 방해요소 1개일때는 10k 수준에서 93% 정도이지만, 방해요소 4개일때는 10k 수준에서 65%로 급락.
+- 500k 이하 작은 모델은 10k 수준에서 방해요소 4개일때 정확도 31%로 최하.
+- 방해요소의 의미에 따라 하락률에 미치는 영향이 다름
+- 클로드 모델은 일관되게 가장 낮은 환각률. 특히, 클로드 소네트 4와 오푸스 4는 특히 보수적이며, 불확실할 때 답을 찾을 수 없다고 명시적으로 언급하며 기권하는 경향. 이와 대조적으로, GPT 모델은 가장 높은 환각률을 보이며, 방해 요소가 있을 때 종종 확신은 있지만 잘못된 반응.
+</code></pre>
+<h2 id="-needle-haystack-similarity"><strong>바늘-건초더미 유사성(Needle-Haystack Similarity)</strong></h2>
+<pre><code>- 에세이 건초더미에서 에세이 바늘찾기보다, 에세이 건초더미에서 arXiv 바늘찾기 정확도가 더 높았음. 장르가 다르면 더 찾기 쉽다는 가설 설정 가능하나, arxiv 건초더미에서 다른 바늘 찾기 정확도는 거의 같았고, 에세이보다 전체적으로 낮았음. 
+- 전문 영역 건초더미에서 바늘 찾기가 어려울 수 있다는 가설 설정 가능(토큰 수 많아서?)
+</code></pre>
+<h2 id="haystack-structure"><strong>건초더미 구조(Haystack Structure)</strong></h2>
+<pre><code>- 논리적이고 구조적으로 일관성이 있는 건초더미와 셔플된 무작위 건초더미 중에서, 놀랍게도 모든 모델과 환경에서 **'무작위 건초더미'에서 바늘을 찾는 정확도가 5~8% 더 높았음**
+- 이는 입력 구조(글의 논리적 순서)가 어텐션에 미치는 영향에 대한 해석 가능성 연구가 필요함을 의미
+    - 다시 말해, 입력의 논리적 구조나 패턴은 어텐션 메커니즘 적용에 영향을 미침
+</code></pre>
+<ul>
+<li>
+<p>LongMemEval 테스트</p>
+<ul>
+<li>긴 채팅 히스토리 컨텍스트가 제시되어 '관련 맥락을 찾는 단계'와 '대답을 위한 추론 단계'를 모두 만족시키는지 체크</li>
+<li>관련 맥락을 찾을 필요가 없는 '집중된 입력'(약 300 토큰)과 '전체 입력'(113k 토큰) 두 가지 조건에 대해서 모든 모델들이 '전체 입력'의 경우에 낮은 정확도를 보임. 클로드 opus 4  thinking은 '전체 입력'에 대해 약 23% 성능 하락,  opus 4 는 정확도 92% -&gt; 38%로 약 54%의 성능 하락</li>
+<li>그러나 구글 gemini 는 상대적으로 하락 방어율이 괜찮았음 (정확도 70~80% 정도)</li>
+</ul>
+</li>
+<li>
+<p>반복되는 단어 ( Repeated Words)</p>
+<ul>
+<li>문자열을 n번 반복하라는 간단한 작업에도 컨텍스트 길이가 길어짐에 따라 모델 성능이 균일하지 않음</li>
+</ul>
+</li>
+<li>
+<p>향후 추가연구</p>
+<ul>
+<li>긴 맥락을 다루는 애플리케이션이 합성이나 다단계 추론이 필요한 경우 성능 저하가 훨씬 더 심각할 것으로 예상</li>
+<li>추론 시점에 장문맥이 성능 저하를 보이지만, 훈련 시점에도 장문맥 데이터가 있으면 훈련 효율을 떨어뜨릴까?</li>
+</ul>
+</li>
+<li>
+<p>적용</p>
+<h2 id="-">- 벤치마크의 자료구조는 역으로, 훈련 데이터를 어떻게 설계하고 수집할 것인가에 대한 기초 아이디어를 제공하기도 한다.</h2>
+</li>
+</ul>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      <script id="__config" type="application/json">{"base": "..", "features": [], "search": "../assets/javascripts/workers/search.d50fe291.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+    
+    
+      <script src="../assets/javascripts/bundle.50899def.min.js"></script>
+      
+    
+  </body>
+</html>
