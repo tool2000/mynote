@@ -11,6 +11,8 @@
         <link rel="canonical" href="https://tool2000.github.io/notes/context-rot/">
       
       
+        <link rel="prev" href="..">
+      
       
       
       <link rel="icon" href="../assets/images/favicon.png">
@@ -18,7 +20,7 @@
     
     
       
-        <title>컨텍스트 부패, 입력토큰의 증가가 LLM 성능에 미치는 영향 - AI Research Notes</title>
+        <title>Context - AI Research Notes</title>
       
     
     
@@ -96,7 +98,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              컨텍스트 부패, 입력토큰의 증가가 LLM 성능에 미치는 영향
+              Context
             
           </span>
         </div>
@@ -203,6 +205,133 @@
   
 
       </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    Context
+    
+  </span>
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    Context
+    
+  </span>
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      문제 제기
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#long-context-llm-benchmark" class="md-nav__link">
+    <span class="md-ellipsis">
+      long context 에서 llm 모델의 성능저하를 보여주는 benchmark
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#-needle-question-similarity" class="md-nav__link">
+    <span class="md-ellipsis">
+      바늘-질문 유사성(Needle-Question Similarity)
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#impact-of-distractors" class="md-nav__link">
+    <span class="md-ellipsis">
+      방해 요소의 영향(Impact of Distractors)
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#-needle-haystack-similarity" class="md-nav__link">
+    <span class="md-ellipsis">
+      바늘-건초더미 유사성(Needle-Haystack Similarity)
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#haystack-structure" class="md-nav__link">
+    <span class="md-ellipsis">
+      건초더미 구조(Haystack Structure)
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#-" class="md-nav__link">
+    <span class="md-ellipsis">
+      - 벤치마크의 자료구조는 역으로, 훈련 데이터를 어떻게 설계하고 수집할 것인가에 대한 기초 아이디어를 제공하기도 한다.
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
     </li>
   
 
