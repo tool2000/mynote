@@ -582,7 +582,7 @@
 <li>각 길이별로 <strong>예제 500개</strong> 생성 → **정답 토큰의 존재 여부(리콜 기반 정확도)**로 채점(답 회피 방지를 위해 답안 접두어를 함께 제공). (<a href="https://ar5iv.org/pdf/2404.06654" title="[2404.06654] \faRulerRuler: What’s the Real Context Size of Your Long-Context Language Models?">ar5iv</a>)</li>
 <li><strong>Effective Context Size(실효 컨텍스트 길이)</strong>: Llama-2-7B가 **4K에서 낸 점수(85.6%)**를 기준선으로 두고, 평균 점수가 이 기준을 <strong>넘는 최장 길이</strong>를 “실효 길이”로 정의합니다. 또한 길이별 성능을 가중 평균(짧은 쪽/긴 쪽 가중 시나리오)으로도 비교합니다. (<a href="https://ar5iv.org/pdf/2404.06654" title="[2404.06654] \faRulerRuler: What’s the Real Context Size of Your Long-Context Language Models?">ar5iv</a>, <a href="https://github.com/NVIDIA/RULER" title="GitHub - NVIDIA/RULER: This repo contains the source code for RULER: What’s the Real Context Size of Your Long-Context Language Models?">GitHub</a>)</li>
 </ul>
-<h1 id="_5">주요 관찰(요지)</h1>
+<h2 id="_5">주요 관찰(요지)</h2>
 <ul>
 <li><strong>길이가 늘수록 대부분 급격히 성능 저하</strong>: 단순 NIAH는 거의 만점이지만, 다단 추적/집계/방해가 섞이면 길이 증가에 따라 급락합니다. **주장(context claim)**보다 <strong>실효 길이</strong>가 짧은 경우가 흔합니다. (<a href="https://ar5iv.org/pdf/2404.06654" title="[2404.06654] \faRulerRuler: What’s the Real Context Size of Your Long-Context Language Models?">ar5iv</a>)</li>
 <li><strong>모델 크기와 포지셔널 세팅의 영향</strong>: 큰 모델이 전반적으로 유리하고, RoPE 등 <strong>위치 임베딩 설정</strong>·길이 학습 방식에 따라 장거리에서 급추락(엑스트라폴레이션 실패)이 나타납니다. (<a href="https://ar5iv.org/pdf/2404.06654" title="[2404.06654] \faRulerRuler: What’s the Real Context Size of Your Long-Context Language Models?">ar5iv</a>)</li>
