@@ -11,8 +11,6 @@
         <link rel="canonical" href="https://tool2000.github.io/notes/contextrot/">
       
       
-        <link rel="prev" href="..">
-      
       
         <link rel="next" href="../smollm3/">
       
@@ -64,7 +62,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#llm-25714" class="md-skip">
+        <a href="#llm-long-context" class="md-skip">
           Skip to content
         </a>
       
@@ -193,28 +191,6 @@
       
   
   
-  
-  
-    <li class="md-nav__item">
-      <a href=".." class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    Home
-    
-  </span>
-  
-
-      </a>
-    </li>
-  
-
-    
-      
-      
-  
-  
     
   
   
@@ -271,6 +247,15 @@
   <a href="#_1" class="md-nav__link">
     <span class="md-ellipsis">
       문제 제기
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_2" class="md-nav__link">
+    <span class="md-ellipsis">
+      나의 생각
     </span>
   </a>
   
@@ -334,15 +319,6 @@
   <a href="#repeated-words" class="md-nav__link">
     <span class="md-ellipsis">
       반복되는 단어(Repeated Words)
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#_2" class="md-nav__link">
-    <span class="md-ellipsis">
-      내 생각정리
     </span>
   </a>
   
@@ -414,6 +390,15 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#_2" class="md-nav__link">
+    <span class="md-ellipsis">
+      나의 생각
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#long-context-benchmark" class="md-nav__link">
     <span class="md-ellipsis">
       long context 에서 모델의 성능저하를 보여주는 benchmark
@@ -476,15 +461,6 @@
   
 </li>
       
-        <li class="md-nav__item">
-  <a href="#_2" class="md-nav__link">
-    <span class="md-ellipsis">
-      내 생각정리
-    </span>
-  </a>
-  
-</li>
-      
     </ul>
   
 </nav>
@@ -501,12 +477,19 @@
 
 
 
-<h1 id="llm-25714"><strong>컨텍스트 부패, 입력토큰의 증가가 LLM 성능에 미치는 영향</strong>(25.7.14)</h1>
+<h1 id="llm-long-context"><strong>LLM은 Long Context를 잘 처리할 수 있을까?</strong></h1>
 <h2 id="_1"><strong>문제 제기</strong></h2>
 <ul>
 <li>long context 성능 평가는 주로 건초더미 속 바늘(NIAH) 테스트로 측정된다</li>
-<li>그러나 이는 간단한 어휘 검색 과제일뿐 요약이나 모호한 정보 처리에 대한 추론 능력까지 완벽한지는 의문이다</li>
-<li>링크 : https://research.trychroma.com/context-rot</li>
+<li>그러나 이는 간단한 어휘 검색 과제일뿐 요약이나 복잡한 의미처리, 다양한 추론 능력까지 완벽한지는 의문이다 (사실상 25.8월 현재는 빅테크들의 마케팅 영향을 무시할 수 없을 것 같다)</li>
+<li>참조링크 : https://research.trychroma.com/context-rot (원제: 컨텍스트 부패, 입력토큰의 증가가 LLM 성능에 미치는 영향)</li>
+</ul>
+<h2 id="_2"><strong>나의 생각</strong></h2>
+<ul>
+<li>긴 맥락을 다루는 애플리케이션이 합성이나 다단계 추론이 필요한 경우 성능 저하가 훨씬 더 심각할 것으로 예상</li>
+<li>현재 많은 RAG 시스템의 실제 성능 대비 낮은 만족도의 주된 이유가 장문 컨텍스트 능력 저하와 연관이 있을 것으로 생각됨</li>
+<li>추론 시점에 장문맥이 성능 저하를 보이지만, 훈련 시점에도 장문맥 데이터가 있으면 훈련 효율을 떨어뜨릴 가능성 존재</li>
+<li>벤치마크의 자료구조는 역으로, 훈련 데이터를 어떻게 설계하고 수집할 것인가에 대한 기초 아이디어를 제공</li>
 </ul>
 <h2 id="long-context-benchmark"><strong>long context 에서 모델의 성능저하를 보여주는 benchmark</strong></h2>
 <ul>
@@ -559,39 +542,33 @@
 <ul>
 <li>문자열을 n번 반복하라는 간단한 작업에도 컨텍스트 길이가 길어짐에 따라 모델 성능이 균일하지 않음</li>
 </ul>
-<h2 id="_2"><strong>내 생각정리</strong></h2>
-<ul>
-<li>긴 맥락을 다루는 애플리케이션이 합성이나 다단계 추론이 필요한 경우 성능 저하가 훨씬 더 심각할 것으로 예상</li>
-<li>추론 시점에 장문맥이 성능 저하를 보이지만, 훈련 시점에도 장문맥 데이터가 있으면 훈련 효율을 떨어뜨릴까?</li>
-<li>벤치마크의 자료구조는 역으로, 훈련 데이터를 어떻게 설계하고 수집할 것인가에 대한 기초 아이디어를 제공하기도 한다.</li>
-</ul>
 <hr />
 <h1 id="long-context-benchmark-ruler"><strong>Long Context Benchmark : Ruler</strong></h1>
 <h2 id="ruler">RULER 란 무엇인가</h2>
 <ul>
-<li><strong>무엇?</strong> “내 모델이 진짜로 쓸 수 있는 컨텍스트 길이는 얼마인가?”를 가늠하려고 만든 <strong>롱 컨텍스트 벤치마크</strong>. 엔비디아 연구진이 2024년 4월 공개했고(최신 v3: 2024-08-06), 코드/데이터를 오픈소스로 배포합니다. (<a href="https://arxiv.org/abs/2404.06654" title="[2404.06654] RULER: What's the Real Context Size of Your Long-Context Language Models?">arXiv</a>)</li>
-<li><strong>왜?</strong> 흔한 Needle-in-a-Haystack(NIAH) 같은 <strong>단순 검색(needle 찾기)</strong> 테스트만으로는 긴 문맥 이해를 충분히 측정하지 못하기 때문입니다. RULER는 <strong>검색을 넘는 과제들</strong>까지 포함해 더 종합적으로 평가합니다. (<a href="https://ar5iv.org/pdf/2404.06654" title="[2404.06654] \faRulerRuler: What’s the Real Context Size of Your Long-Context Language Models?">ar5iv</a>)</li>
+<li><strong>무엇?</strong> “내 모델이 진짜로 쓸 수 있는 컨텍스트 길이는 얼마인가?”를 가늠하려고 만든 <strong>롱 컨텍스트 벤치마크</strong>. 엔비디아 연구진이 2024년 4월 공개했고(최신 v3: 2024-08-06), 코드/데이터를 오픈소스로 배포. (<a href="https://arxiv.org/abs/2404.06654" title="[2404.06654] RULER: What's the Real Context Size of Your Long-Context Language Models?">arXiv</a>)</li>
+<li><strong>왜?</strong> 흔한 Needle-in-a-Haystack(NIAH) 같은 <strong>단순 검색(needle 찾기)</strong> 테스트만으로는 긴 문맥 이해를 충분히 측정하지 못하기 때문. RULER는 <strong>검색을 넘는 과제들</strong>까지 포함해 더 종합적으로 평가. (<a href="https://ar5iv.org/pdf/2404.06654" title="[2404.06654] \faRulerRuler: What’s the Real Context Size of Your Long-Context Language Models?">ar5iv</a>)</li>
 </ul>
 <h2 id="_3">무엇을 어떻게 측정하나</h2>
-<p>RULER는 <strong>4개 카테고리, 13개 대표 과제</strong>(길이·난이도 조절 가능)로 구성됩니다. 각 길이(4K, 8K, 16K, 32K, 64K, 128K 토큰)에 대해 예제를 대량 생성해 측정해요. (<a href="https://ar5iv.org/pdf/2404.06654" title="[2404.06654] \faRulerRuler: What’s the Real Context Size of Your Long-Context Language Models?">ar5iv</a>)</p>
+<p>RULER는 <strong>4개 카테고리, 13개 대표 과제</strong>(길이·난이도 조절 가능)로 구성됩니다. 각 길이(4K, 8K, 16K, 32K, 64K, 128K 토큰)에 대해 예제를 대량 생성해 측정. (<a href="https://ar5iv.org/pdf/2404.06654" title="[2404.06654] \faRulerRuler: What’s the Real Context Size of Your Long-Context Language Models?">ar5iv</a>)</p>
 <ol>
 <li><strong>Retrieval(검색)</strong>: 고전 NIAH/패스키/라인/키-값 검색을 확장해 <strong>needle의 종류·개수</strong>를 바꿔가며 회복력까지 확인(예: UUID처럼 긴 문자열 회수). (<a href="https://ar5iv.org/pdf/2404.06654" title="[2404.06654] \faRulerRuler: What’s the Real Context Size of Your Long-Context Language Models?">ar5iv</a>)</li>
-<li><strong>Multi-hop Tracing(다단 추적)</strong>: 변수 추적 과제로 <strong>여러 홉에 걸친 연결/지시어</strong>를 따라가며 올바른 엔티티를 찾아냅니다. (<a href="https://ar5iv.org/pdf/2404.06654" title="[2404.06654] \faRulerRuler: What’s the Real Context Size of Your Long-Context Language Models?">ar5iv</a>)</li>
-<li><strong>Aggregation(집계)</strong>: 긴 문맥에 흩어진 정보를 모아 <strong>공통/빈출 단어 추출</strong> 등 요약의 기초 능력을 봅니다. (<a href="https://ar5iv.org/pdf/2404.06654" title="[2404.06654] \faRulerRuler: What’s the Real Context Size of Your Long-Context Language Models?">ar5iv</a>)</li>
-<li><strong>QA(질문응답)</strong>: SQuAD/HotpotQA 등에 <strong>방해 문서</strong>를 대량 주입해 긴 문맥에서도 정확히 근거를 찾아 답할 수 있는지 확인합니다. (<a href="https://ar5iv.org/pdf/2404.06654" title="[2404.06654] \faRulerRuler: What’s the Real Context Size of Your Long-Context Language Models?">ar5iv</a>)</li>
+<li><strong>Multi-hop Tracing(다단 추적)</strong>: 변수 추적 과제로 <strong>여러 홉에 걸친 연결/지시어</strong>를 따라가며 올바른 엔티티를 찾아냄. (<a href="https://ar5iv.org/pdf/2404.06654" title="[2404.06654] \faRulerRuler: What’s the Real Context Size of Your Long-Context Language Models?">ar5iv</a>)</li>
+<li><strong>Aggregation(집계)</strong>: 긴 문맥에 흩어진 정보를 모아 <strong>공통/빈출 단어 추출</strong> 등 요약의 기초 능력을 확인 (<a href="https://ar5iv.org/pdf/2404.06654" title="[2404.06654] \faRulerRuler: What’s the Real Context Size of Your Long-Context Language Models?">ar5iv</a>)</li>
+<li><strong>QA(질문응답)</strong>: SQuAD/HotpotQA 등에 <strong>방해 문서</strong>를 대량 주입해 긴 문맥에서도 정확히 근거를 찾아 답할 수 있는지 확인 (<a href="https://ar5iv.org/pdf/2404.06654" title="[2404.06654] \faRulerRuler: What’s the Real Context Size of Your Long-Context Language Models?">ar5iv</a>)</li>
 </ol>
 <p><strong>평가 지표/프로토콜</strong></p>
 <ul>
 <li>각 길이별로 <strong>예제 500개</strong> 생성 → **정답 토큰의 존재 여부(리콜 기반 정확도)**로 채점(답 회피 방지를 위해 답안 접두어를 함께 제공). (<a href="https://ar5iv.org/pdf/2404.06654" title="[2404.06654] \faRulerRuler: What’s the Real Context Size of Your Long-Context Language Models?">ar5iv</a>)</li>
-<li><strong>Effective Context Size(실효 컨텍스트 길이)</strong>: Llama-2-7B가 **4K에서 낸 점수(85.6%)**를 기준선으로 두고, 평균 점수가 이 기준을 <strong>넘는 최장 길이</strong>를 “실효 길이”로 정의합니다. 또한 길이별 성능을 가중 평균(짧은 쪽/긴 쪽 가중 시나리오)으로도 비교합니다. (<a href="https://ar5iv.org/pdf/2404.06654" title="[2404.06654] \faRulerRuler: What’s the Real Context Size of Your Long-Context Language Models?">ar5iv</a>, <a href="https://github.com/NVIDIA/RULER" title="GitHub - NVIDIA/RULER: This repo contains the source code for RULER: What’s the Real Context Size of Your Long-Context Language Models?">GitHub</a>)</li>
+<li><strong>Effective Context Size(실효 컨텍스트 길이)</strong>: Llama-2-7B가 **4K에서 낸 점수(85.6%)**를 기준선으로 두고, 평균 점수가 이 기준을 <strong>넘는 최장 길이</strong>를 “실효 길이”로 정의. 또한 길이별 성능을 가중 평균(짧은 쪽/긴 쪽 가중 시나리오)으로도 비교. (<a href="https://ar5iv.org/pdf/2404.06654" title="[2404.06654] \faRulerRuler: What’s the Real Context Size of Your Long-Context Language Models?">ar5iv</a>, <a href="https://github.com/NVIDIA/RULER" title="GitHub - NVIDIA/RULER: This repo contains the source code for RULER: What’s the Real Context Size of Your Long-Context Language Models?">GitHub</a>)</li>
 </ul>
 <h2 id="_4">주요 관찰(요지)</h2>
 <ul>
-<li><strong>길이가 늘수록 대부분 급격히 성능 저하</strong>: 단순 NIAH는 거의 만점이지만, 다단 추적/집계/방해가 섞이면 길이 증가에 따라 급락합니다. **주장(context claim)**보다 <strong>실효 길이</strong>가 짧은 경우가 흔합니다. (<a href="https://ar5iv.org/pdf/2404.06654" title="[2404.06654] \faRulerRuler: What’s the Real Context Size of Your Long-Context Language Models?">ar5iv</a>)</li>
-<li><strong>모델 크기와 포지셔널 세팅의 영향</strong>: 큰 모델이 전반적으로 유리하고, RoPE 등 <strong>위치 임베딩 설정</strong>·길이 학습 방식에 따라 장거리에서 급추락(엑스트라폴레이션 실패)이 나타납니다. (<a href="https://ar5iv.org/pdf/2404.06654" title="[2404.06654] \faRulerRuler: What’s the Real Context Size of Your Long-Context Language Models?">ar5iv</a>)</li>
+<li><strong>길이가 늘수록 대부분 급격히 성능 저하</strong>: 단순 NIAH는 거의 만점이지만, 다단 추적/집계/방해가 섞이면 길이 증가에 따라 급락. **주장(context claim)**보다 <strong>실효 길이</strong>가 짧은 경우가 흔함 (<a href="https://ar5iv.org/pdf/2404.06654" title="[2404.06654] \faRulerRuler: What’s the Real Context Size of Your Long-Context Language Models?">ar5iv</a>)</li>
+<li><strong>모델 크기와 포지셔널 세팅의 영향</strong>: 큰 모델이 전반적으로 유리하고, RoPE 등 <strong>위치 임베딩 설정</strong>·길이 학습 방식에 따라 장거리에서 급추락(엑스트라폴레이션 실패). (<a href="https://ar5iv.org/pdf/2404.06654" title="[2404.06654] \faRulerRuler: What’s the Real Context Size of Your Long-Context Language Models?">ar5iv</a>)</li>
 </ul>
 <h2 id="2025">현재(2025) 공개 스코어보드 스냅샷</h2>
-<p>RULER 깃허브 README에는 최신 모델들의 <strong>실효 길이/가중 평균 점수</strong>가 꾸준히 업데이트됩니다(“살아있는” 표이므로 일부는 저자 보고치). 예시:</p>
+<p>RULER 깃허브 README에는 최신 모델들의 <strong>실효 길이/가중 평균 점수</strong>가 꾸준히 업데이트:</p>
 <ul>
 <li><strong>Jamba-1.5-Large</strong>·<strong>Gemini-1.5-Pro</strong>: <strong>&gt;128K</strong>에서도 높은 평균(≈96 전후).</li>
 <li><strong>GPT-4-1106-preview</strong>: <strong>실효 64K</strong>로 보고.</li>
@@ -601,12 +578,12 @@
 <h2 id="_5">다른 벤치마크와 차이</h2>
 <ul>
 <li><strong>RULER</strong>: 전부 <strong>합성(synthetic)</strong> → 길이/난이도 <strong>정밀 제어</strong>, <strong>파라메트릭 지식 영향 최소화</strong>.</li>
-<li><strong>LongBench / L-Eval / ZeroSCROLLS / BAMBOO / InfiniteBench</strong> 등은 <strong>현실/혼합 과제</strong> 비중이 커 다양성은 높지만 길이·난이도 통제가 상대적으로 어렵습니다(표로 비교). (<a href="https://ar5iv.org/pdf/2404.06654" title="[2404.06654] \faRulerRuler: What’s the Real Context Size of Your Long-Context Language Models?">ar5iv</a>)</li>
+<li><strong>LongBench / L-Eval / ZeroSCROLLS / BAMBOO / InfiniteBench</strong> 등은 <strong>현실/혼합 과제</strong> 비중이 커 다양성은 높지만 길이·난이도 통제가 상대적으로 어려움(표로 비교). (<a href="https://ar5iv.org/pdf/2404.06654" title="[2404.06654] \faRulerRuler: What’s the Real Context Size of Your Long-Context Language Models?">ar5iv</a>)</li>
 </ul>
 <h2 id="_6">한계와 확장</h2>
 <ul>
-<li><strong>합성 위주</strong>라서 “현실적 사용”을 전부 대체하진 못합니다(저자들도 한계로 명시). 현실 과제(긴 문서 요약/검색·도구연계)와 <strong>보완적으로</strong> 쓰는 게 좋습니다. (<a href="https://github.com/NVIDIA/RULER" title="GitHub - NVIDIA/RULER: This repo contains the source code for RULER: What’s the Real Context Size of Your Long-Context Language Models?">GitHub</a>)</li>
-<li><strong>다국어 확장</strong>: 2025년 공개된 <strong>ONERULER</strong>는 RULER를 26개 언어로 확장(검색·집계·“정답 없음” 변형 등). 다국어/교차언어 긴 문맥에서 격차가 커짐을 보고합니다. (<a href="https://arxiv.org/abs/2503.01996?utm_source=chatgpt.com" title="One ruler to measure them all: Benchmarking multilingual long-context language models">arXiv</a>)</li>
+<li><strong>합성 위주</strong>라서 “현실적 사용”을 전부 대체하진 못함(저자들도 한계로 명시). 현실 과제(긴 문서 요약/검색·도구연계)와 <strong>보완적으로</strong> 쓰는 게 좋음 (<a href="https://github.com/NVIDIA/RULER" title="GitHub - NVIDIA/RULER: This repo contains the source code for RULER: What’s the Real Context Size of Your Long-Context Language Models?">GitHub</a>)</li>
+<li><strong>다국어 확장</strong>: 2025년 공개된 <strong>ONERULER</strong>는 RULER를 26개 언어로 확장(검색·집계·“정답 없음” 변형 등). 다국어/교차언어 긴 문맥에서 격차가 커짐을 보고 (<a href="https://arxiv.org/abs/2503.01996?utm_source=chatgpt.com" title="One ruler to measure them all: Benchmarking multilingual long-context language models">arXiv</a>)</li>
 </ul>
 
 
@@ -634,15 +611,11 @@
   
   <div class="md-footer-meta md-typeset">
     <div class="md-footer-meta__inner md-grid">
-      <div class="md-copyright">
+      <div class="md-footer-copyright">
+    <div class="md-footer-copyright__highlight">© 2025 AI Research Notes</div>
+    <span>LLM, AI 연구자의 노트기록장입니다. 읽고 요약하고 생각한 것을 공유합니다. 협업을 원하시면 sanmaroo77@지메일 로 연락주세요.</span>
+  </div>
   
-  
-    Made with
-    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
-      Material for MkDocs
-    </a>
-  
-</div>
       
     </div>
   </div>
